@@ -11,7 +11,7 @@ jobs:
 
     steps:
     
-      # Configure kubeconfig dynamically
+      # Configure kubeconfig on the runner
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
