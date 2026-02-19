@@ -42,9 +42,7 @@ jobs:
         directory: .
         dockerfile: Dockerfile
 
-    - name: Set Docker image name
-      id: docker_build
-      run: echo "image_name=namrarasheed154/python-app" >> $GITHUB_OUTPUT
+  
 
 
      
