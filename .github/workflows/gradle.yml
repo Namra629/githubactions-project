@@ -42,7 +42,7 @@ jobs:
         password: ${{ secrets.Docker_Pass }}
         directory: .
         dockerfile: Dockerfile
-        tags: 1.1
+        tag: 1.1
   
 
 
