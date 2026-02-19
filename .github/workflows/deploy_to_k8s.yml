@@ -20,7 +20,7 @@ jobs:
       with:
         context: .
         push: true
-        tag: 1.0
+        tags: 1.0
 
     - name: Deploy to k8s
       uses: actions-hub/kubectl@master
