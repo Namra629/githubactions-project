@@ -41,3 +41,15 @@ jobs:
         password: ${{ secrets.Docker_Pass }}
         directory: .
         dockerfile: Dockerfile
+
+    - name: Set Docker image name
+     id: docker_build
+     run: echo "image_name=namrarasheed154/python-app" >> $GITHUB_OUTPUT
+     
+    - name: Print Docker image name
+      run:  echo "Docker image: ${{ steps.docker_build.outputs.image }}"
+     
+
+
+     
+
