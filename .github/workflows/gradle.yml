@@ -34,7 +34,7 @@ jobs:
       run: ls -l build/libs/
 
     - name: Build and Push Docker Image
-      uses: docker/build-push-action@v6
+      uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: namrarasheed154/java-app
         registry: docker.io
