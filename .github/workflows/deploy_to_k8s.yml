@@ -45,12 +45,6 @@ jobs:
           dockerfile: Dockerfile
           tags: latest
 
-      # Configure kubeconfig (only needed if not already present on runner)
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p /home/gh-runner/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > /home/gh-runner/.kube/config
-          chmod 600 /home/gh-runner/.kube/config
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
