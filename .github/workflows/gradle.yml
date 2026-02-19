@@ -42,7 +42,7 @@ jobs:
         password: ${{ secrets.Docker_Pass }}
         directory: .
         dockerfile: Dockerfile
-        tags: $Docker_Username/java-app:1.0
+        tags: namrarasheed154/java-app:1.0
   
 
 
