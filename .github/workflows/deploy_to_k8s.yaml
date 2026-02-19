@@ -34,8 +34,8 @@ jobs:
           kind: Config
           clusters:
           - cluster:
-              certificate-authority-data: ${{ secrets.K8S_CA }}
-              server: ${{ secrets.K8S_SERVER }}
+              certificate-authority-data: ${{ secrets.KUBE_CA }}
+              server: ${{ secrets.KUBE_SERVER }}
             name: github-actions-cluster
           contexts:
           - context:
@@ -46,7 +46,7 @@ jobs:
           users:
           - name: gha-deployer
             user:
-              token: ${{ secrets.K8S_TOKEN }}
+              token: ${{ secrets.KUBE_TOKEN }}
           EOF
           chmod 600 $HOME/.kube/config
 
