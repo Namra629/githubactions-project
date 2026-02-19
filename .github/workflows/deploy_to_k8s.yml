@@ -24,11 +24,12 @@ jobs:
       # Build project
       - name: Build with Gradle
         run: ./gradlew build
-# 5️⃣ Configure kubeconfig dynamically
+
+      # 5️⃣ Configure kubeconfig dynamically
       - name: Configure kubeconfig
         run: |
-         mkdir -p $HOME/.kube
-         cat <<EOF > $HOME/.kube/config
+          mkdir -p $HOME/.kube
+          cat <<EOF > $HOME/.kube/config
 apiVersion: v1
 kind: Config
 clusters:
@@ -47,12 +48,12 @@ users:
 - name: gha-user
   user:
     token: ${{ secrets.KUBE_TOKEN }}
-EOF
-    chmod 600 $HOME/.kube/config
+       EOF
+         chmod 600 $HOME/.kube/config
 
-
-      # Deploy to Kubernetes
+      # 6️⃣ Deploy to Kubernetes
       - name: Deploy to k8s
         run: |
           kubectl get pods
           kubectl apply -f deployment.yml
+
