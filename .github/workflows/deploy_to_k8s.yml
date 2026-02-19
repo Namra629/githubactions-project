@@ -34,26 +34,26 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           cat <<EOF > $HOME/.kube/config
-apiVersion: v1
-kind: Config
-clusters:
-- name: cluster
-  cluster:
-    certificate-authority-data: ${{ secrets.KUBE_CA }}
-    server: ${{ secrets.KUBE_URL }}
-contexts:
-- name: context
-  context:
-    cluster: cluster
-    user: gha-user
-    namespace: github-actions
-current-context: context
-users:
-- name: gha-user
-  user:
-    token: ${{ secrets.KUBE_TOKEN }}
- EOF
-    chmod 600 $HOME/.kube/config
+          apiVersion: v1
+          kind: Config
+          clusters:
+          - name: cluster
+            cluster:
+              certificate-authority-data: ${{ secrets.KUBE_CA }}
+              server: ${{ secrets.KUBE_URL }}
+          contexts:
+          - name: context
+            context:
+              cluster: cluster
+              user: gha-user
+              namespace: github-actions
+          current-context: context
+          users:
+          - name: gha-user
+            user:
+              token: ${{ secrets.KUBE_TOKEN }}
+          EOF
+          chmod 600 $HOME/.kube/config
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
@@ -62,5 +62,4 @@ users:
           kubectl apply -f deployment.yml
           kubectl rollout status deployment/nginx-deployment
           kubectl get pods -n github-actions
-
 
