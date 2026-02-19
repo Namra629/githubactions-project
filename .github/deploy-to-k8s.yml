@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  KUBECONFIG: ${{ secrets.KUBECONFIG }}
+  KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
 
 jobs:
   deploy:
@@ -26,4 +26,4 @@ jobs:
       with:
         args: apply -f deployment.yaml
         env:
-        KUBECONFIG: ${{ env.KUBECONFIG }}
+        KUBECONFIG: ${{ env.KUBE_CONFIG }}
