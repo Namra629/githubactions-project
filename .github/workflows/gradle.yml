@@ -23,7 +23,7 @@ jobs:
       uses: actions/setup-java@v5
       with:
         java-version: '21'
-        distibution: 'temurin'
+        distribution: 'temurin'
     - name: Grant execute permission for gradlew
     # Command to run . attribute for this is run.
       run: chmod +x gradlew
