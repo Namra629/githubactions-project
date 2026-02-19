@@ -48,6 +48,6 @@ jobs:
       # Deploy to Kubernetes
       - name: Deploy to k8s
         run: |
-          echo "$KUBE_CONFIG" | base64 --decode > kubeconfig
-          kubectl --kubeconfig=kubeconfig apply -f deployment.yml
+          
+          kubectl --kubeconfig=/home/gh-runner/.kube/config apply -f deployment.yml
       
