@@ -7,23 +7,19 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # GitHub-hosted runner
 
     steps:
       # Checkout code
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      # Set up Java
+      # Set up Java (if needed)
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '8'
-
-      # Make gradlew executable
-      - name: Grant execute permission
-        run: chmod +x gradlew
 
       # Build project
       - name: Build with Gradle
@@ -37,19 +33,18 @@ jobs:
           apiVersion: v1
           kind: Config
           clusters:
-          - name: cluster
-            cluster:
+          - cluster:
               certificate-authority-data: ${{ secrets.KUBE_CA }}
               server: ${{ secrets.KUBE_URL }}
+            name: github-actions-cluster
           contexts:
-          - name: context
-            context:
-              cluster: cluster
-              user: gha-user
-              namespace: github-actions
-          current-context: context
+          - context:
+              cluster: github-actions-cluster
+              user: gha-deployer
+            name: gha-context
+          current-context: gha-context
           users:
-          - name: gha-user
+          - name: gha-deployer
             user:
               token: ${{ secrets.KUBE_TOKEN }}
           EOF
@@ -58,8 +53,5 @@ jobs:
       # Deploy to Kubernetes
       - name: Deploy to k8s
         run: |
-          kubectl delete deployment nginx-deployment --ignore-not-found=true
+          kubectl get pods
           kubectl apply -f deployment.yml
-          kubectl rollout status deployment/nginx-deployment
-          kubectl get pods -n github-actions
-
