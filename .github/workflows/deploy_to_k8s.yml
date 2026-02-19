@@ -1,4 +1,4 @@
-name: Deploy to k8s
+name: Deploy to Kubernetes
 
 on:
   push:
@@ -7,44 +7,50 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest  # GitHub-hosted runner
 
     steps:
       # Checkout code
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-# If the image is used in the deployment manifest
-      # Set up JDK 8
+      # Set up Java (if needed)
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '8'
 
-      # Grant execute permission for Gradle wrapper
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # Build project with Gradle
+      # Build project
       - name: Build with Gradle
         run: ./gradlew build
 
-      # List build artifacts
-      - name: List build artifacts
-        run: ls -l build/libs/
+      # Configure kubeconfig dynamically
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          cat <<EOF > $HOME/.kube/config
+          apiVersion: v1
+          kind: Config
+          clusters:
+          - cluster:
+              certificate-authority-data: ${{ secrets.K8S_CA }}
+              server: ${{ secrets.K8S_SERVER }}
+            name: github-actions-cluster
+          contexts:
+          - context:
+              cluster: github-actions-cluster
+              user: gha-deployer
+            name: gha-context
+          current-context: gha-context
+          users:
+          - name: gha-deployer
+            user:
+              token: ${{ secrets.K8S_TOKEN }}
+          EOF
+          chmod 600 $HOME/.kube/config
 
-      # Build and push Docker image
-      - name: Build and Push Docker Image
-        uses: mr-smithers-excellent/docker-build-push@v4
-        with:
-          image: namrarasheed154/java-app
-          registry: docker.io
-          username: ${{ secrets.Docker_Username }}
-          password: ${{ secrets.Docker_Pass }}
-          directory: .
-          dockerfile: Dockerfile
-          tags: latest
+      
 
 
       # Deploy to Kubernetes
