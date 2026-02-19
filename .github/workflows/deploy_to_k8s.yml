@@ -52,8 +52,8 @@ users:
 - name: gha-user
   user:
     token: ${{ secrets.K8S_TOKEN }}
-EOF
-          chmod 600 $HOME/.kube/config
+         EOF
+           chmod 600 $HOME/.kube/config
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
