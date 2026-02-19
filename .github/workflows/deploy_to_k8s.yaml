@@ -53,5 +53,7 @@ jobs:
       # Deploy to Kubernetes
       - name: Deploy to k8s
         run: |
-          kubectl get pods
-          kubectl apply -f deployment.yml
+         kubectl delete deployment nginx-deployment
+         kubectl apply -f deployment.yml
+         kubectl rollout status deployment/nginx-deployment
+         kubectl get pods | grep nginx
