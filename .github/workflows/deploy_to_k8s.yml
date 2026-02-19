@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # GitHub-hosted runner
+    runs-on: ubuntu-latest
 
     steps:
       # Checkout code
@@ -39,8 +39,8 @@ kind: Config
 clusters:
 - name: cluster
   cluster:
-    certificate-authority-data: ${{ secrets.K8S_CA }}
-    server: ${{ secrets.K8S_SERVER }}
+    certificate-authority-data: ${{ secrets.KUBE_CA }}
+    server: ${{ secrets.KUBE_URL }}
 contexts:
 - name: context
   context:
@@ -51,9 +51,9 @@ current-context: context
 users:
 - name: gha-user
   user:
-    token: ${{ secrets.K8S_TOKEN }}
-         EOF
-           chmod 600 $HOME/.kube/config
+    token: ${{ secrets.KUBE_TOKEN }}
+ EOF
+    chmod 600 $HOME/.kube/config
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
@@ -61,4 +61,6 @@ users:
           kubectl delete deployment nginx-deployment --ignore-not-found=true
           kubectl apply -f deployment.yml
           kubectl rollout status deployment/nginx-deployment
-          kubectl get pods | grep nginx
+          kubectl get pods -n github-actions
+
+
