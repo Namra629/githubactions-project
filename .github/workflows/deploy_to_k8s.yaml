@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # GitHub-hosted runner
+    runs-on: self-hosted  # self-hosted runner
 
     steps:
     
