@@ -20,7 +20,7 @@ jobs:
       
         
  
-           export KUBECONFIG=/home/gh-runner/minimal-kubeconf.yaml
+           export KUBECONFIG=/home/gh-runner/.kube/minimal-kubeconf.yaml
 
 
            kubectl delete deployment nginx-deployment
