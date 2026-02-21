@@ -25,6 +25,8 @@ jobs:
       # Deploy to Kubernetes
       - name: Deploy to k8s
         run: |
+      
+         export KUBECONFIG=$PWD/kubeconfig.yaml
          kubectl delete deployment nginx-deployment
          kubectl apply -f deployment.yml
          kubectl rollout status deployment/nginx-deployment
