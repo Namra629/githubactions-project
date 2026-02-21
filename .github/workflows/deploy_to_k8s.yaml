@@ -12,29 +12,15 @@ jobs:
     steps:
     
       # Configure kubeconfig on the runner
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
       - name: Configure kubeconfig
         run: |
-          mkdir -p $HOME/.kube
-          cat <<EOF > $HOME/.kube/config
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - cluster:
-              certificate-authority-data: ${{ secrets.KUBE_CA }}
-              server: ${{ secrets.KUBE_SERVER }}
-            name: github-actions-cluster
-          contexts:
-          - context:
-              cluster: github-actions-cluster
-              user: gha-deployer
-            name: gha-context
-          current-context: gha-context
-          users:
-          - name: gha-deployer
-            user:
-              token: ${{ secrets.KUBE_TOKEN }}
-          EOF
-          chmod 600 $HOME/.kube/config
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig.yaml
+          export KUBECONFIG=$PWD/kubeconfig.yaml
+          kubectl get nodes
+        
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
