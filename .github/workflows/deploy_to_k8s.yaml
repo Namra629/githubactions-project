@@ -18,8 +18,12 @@ jobs:
       - name: Deploy to k8s
         run: |
       
-         export KUBECONFIG=/home/runner/kube/kubeconfig-minimal.yaml
-         kubectl delete deployment nginx-deployment
-         kubectl apply -f deployment.yml
-         kubectl rollout status deployment/nginx-deployment
-         kubectl get pods | grep nginx
+         - name: Deploy to Kubernetes
+ 
+           export KUBECONFIG=/home/gh-runner/kubeconfig-minimal.yaml
+
+
+           kubectl delete deployment nginx-deployment
+           kubectl apply -f deployment.yml
+           kubectl rollout status deployment/nginx-deployment
+           kubectl get pods | grep nginx
