@@ -5,25 +5,33 @@ on:
     branches:
       - master
 
+env:
+  KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
 jobs:
   deploy:
-    runs-on: self-hosted  # self-hosted runner
+    runs-on: self-hosted  # Self-hosted runner
 
     steps:
-    
+
+      - name: Create temp kubeconfig
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kube/config
      
         
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
-        run: |
+        uses: appleboy/kubectl-action@v1.0.0
+        with:
+         args: apply -f deployment.yaml
+         kubeconfig: $GITHUB_WORKSPACE/kube/config
       
         
  
-           export KUBECONFIG=/home/gh-runner/.kube/minimal-kubeconf.yaml
 
 
-           kubectl delete deployment/nginx-deployment
+           
            kubectl apply -f deployment.yml
            kubectl rollout status deployment/nginx-deployment
            kubectl get pods | grep nginx
