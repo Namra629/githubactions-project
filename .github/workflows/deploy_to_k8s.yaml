@@ -22,16 +22,7 @@ jobs:
 
       # Deploy to Kubernetes
       - name: Deploy to k8s
-        uses: appleboy/kubectl-action@v1.0.0
-        with:
-         args: apply -f deployment.yaml
-         kubeconfig: $GITHUB_WORKSPACE/kube/config
-      
-        
- 
-
-
-           
+        run: |
            kubectl apply -f deployment.yml
            kubectl rollout status deployment/nginx-deployment
            kubectl get pods | grep nginx
