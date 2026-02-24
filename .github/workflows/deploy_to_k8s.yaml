@@ -41,6 +41,7 @@ jobs:
 
       - name: Deploy
         run: |
+          yamllint ~/home/gh-runner/.kube/config
           kubectl delete deployment nginx-deployment --ignore-not-found
           kubectl apply -f deployment.yml 
           kubectl rollout status deployment/nginx-deployment
