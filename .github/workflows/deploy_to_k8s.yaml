@@ -23,8 +23,8 @@ jobs:
           clusters:
           - name: cluster
             cluster:
-              server: ${{ secrets.K8S_SERVER }}
-              certificate-authority-data: ${{ secrets.K8S_CA_DATA }}
+              server: ${{ secrets.K8S_URL }}
+              certificate-authority-data: ${{ secrets.KUBE_CA }}
           contexts:
           - name: context
             context:
@@ -35,8 +35,8 @@ jobs:
           users:
           - name: gh-runner
             user:
-              client-certificate-data: ${{ secrets.K8S_CLIENT_CERT }}
-              client-key-data: ${{ secrets.K8S_CLIENT_KEY }}
+              client-certificate-data: ${{ secrets.RUNNER_CRT }}
+              client-key-data: ${{ secrets.RUNNER_KEY }}
           EOF
 
       - name: Deploy
