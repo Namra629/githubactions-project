@@ -1,3 +1,5 @@
+
+
 name: Deploy to Kubernetes
 
 on:
@@ -11,38 +13,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Create kubeconfig dynamically
+      - name: Create temporary kubeconfig
         run: |
-          mkdir -p $HOME/.kube
-          
-          cat <<EOF > $HOME/.kube/config
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: cluster
-            cluster:
-              server: ${{ secrets.K8S_URL }}
-              certificate-authority-data: ${{ secrets.KUBE_CA }}
-          contexts:
-          - name: context
-            context:
-              cluster: cluster
-              user: gh-runner
-              namespace: runner-ns
-          current-context: context
-          users:
-          - name: gh-runner
-            user:
-              client-certificate-data: ${{ secrets.RUNNER_CRT }}
-              client-key-data: ${{ secrets.RUNNER_KEY }}
-          EOF
+          mkdir -p $GITHUB_WORKSPACE/kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kube/config
+          chmod 600 $GITHUB_WORKSPACE/kube/config
 
-      - name: Deploy
+      - name: Deploy to Kubernetes
         run: |
-          sed -n '15,25p' /home/gh-runner/.kube/config
-          kubectl delete deployment nginx-deployment --ignore-not-found
-          kubectl apply -f deployment.yml 
+          export KUBECONFIG=$GITHUB_WORKSPACE/kube/config
+          kubectl delete deployment/nginx-deployment
+          kubectl apply -f deployment.yml
           kubectl rollout status deployment/nginx-deployment
-          kubectl get pods -n runner-ns
+          kubectl get pods | grep nginx
