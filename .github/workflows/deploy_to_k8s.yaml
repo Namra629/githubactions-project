@@ -1,5 +1,4 @@
 
-
 name: Deploy to Kubernetes
 
 on:
@@ -9,22 +8,23 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted  # Self-hosted runner
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    
+     
+        
 
-      - name: Create temporary kubeconfig
+      # Deploy to Kubernetes
+      - name: Deploy to k8s
         run: |
-          mkdir -p $GITHUB_WORKSPACE/kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kube/config
-          chmod 600 $GITHUB_WORKSPACE/kube/config
+      
+        
+ 
+          
 
-      - name: Deploy to Kubernetes
-        run: |
-          export KUBECONFIG=$GITHUB_WORKSPACE/kube/config
-          kubectl delete deployment/nginx-deployment
-          kubectl apply -f deployment.yml
-          kubectl rollout status deployment/nginx-deployment
-          kubectl get pods | grep nginx
+
+           
+           kubectl apply -f deployment.yml
+           kubectl rollout status deployment/nginx-deployment
+           kubectl get pods | grep nginx
